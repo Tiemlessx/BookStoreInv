@@ -1,0 +1,158 @@
+#include <iostream>
+#include<string.h>
+#include<stdlib.h>
+
+//giveinfo needs debugging
+
+class Book
+{
+private:
+	char* author, * title;
+	float* cost;
+	int* stock;
+public:
+	Book()
+	{
+		author = new char[40];
+		title = new char[40];
+		cost = new float;
+		stock = new int;
+	}
+	void giveinfo();
+	void editinfo();
+	void info();
+	void buy();
+	int findbook(char[], char[]);
+};
+
+void Book::giveinfo() 
+{
+	std::cin.ignore();
+	std::cout << "\nEnter Author:";
+	std::cin.getline(author, 40);
+	std::cout << "Enter title:";
+	std::cin.getline(title, 40);
+	std::cout << "Enter price";
+	std::cin >> *cost;
+	std::cout << "Enter stock";
+	std::cin >> *stock;
+
+}
+
+void Book::editinfo()
+{
+	std::cout << "\nEnter Author:";
+	std::cin.getline(author, 40);
+	std::cout << "Enter title:";
+	std::cin.getline(title, 40);
+	std::cout << "Enter price";
+	std::cin >> *cost;
+	std::cout << "Enter stock";
+	std::cin >> *stock;
+
+}
+
+void Book::info()
+{
+	std::cout << "\nAuthor: " << author;
+	std::cout << "\nTitle: " << title;
+	std::cout << "\nPrice: " << cost;
+	std::cout << "\nNumber of books: " << stock;
+}
+
+void Book::buy()
+{
+	int ammount;
+	std::cout << "How many books you want to buy: ";
+	std::cin >> ammount;
+	if (ammount <= *stock)
+	{
+		*stock = *stock - ammount;
+		std::cout << "Total cost: " << (*cost) * ammount;
+	}
+	else std::cout << "Not enough books in stock";
+}
+
+int Book::findbook(char aSearch[40], char tSearch[40])
+{
+	if (strcmp(aSearch, author) == 0 && strcmp(tSearch, title) == 0)
+		return 1;
+	else return 0;
+}
+
+
+
+int main()
+{
+	Book* book[40];
+	int pick,i=0,j;
+	char aSearch[40], tSearch[40];
+	while (1)
+	{
+		std::cout << "\n1. Add new book";
+		std::cout << "\n2. Buy book";
+		std::cout << "\n3. Search for book";
+		std::cout << "\n4. Edit book";
+		std::cout << "\n5. Exit\n";
+		std::cin >> pick;
+	
+		switch (pick)
+		{
+		case 1:
+			book[i] = new Book;
+			book[i]->giveinfo();
+			i++;break;
+		case 2:
+			std::cin.ignore();
+			std::cout << "\nEnter Author: ";
+			std::cin.getline(aSearch, 40);
+			std::cout << "Enter Title: ";
+			std::cin.getline(tSearch, 40);
+
+			for (j = 0;j < i;j++)
+				if (book[j]->findbook(aSearch, tSearch))
+				{
+					book[j]->buy();
+					break;
+				}
+			if (j == i)
+				std::cout << "Book not in stock";
+			break;
+		case 3:
+			std::cin.ignore();
+			std::cout << "\nEnter Author: ";
+			std::cin.getline(aSearch, 40);
+			std::cout << "Enter Title: ";
+			std::cin.getline(tSearch, 40);
+
+			for (j = 0;j < i;j++)
+				if (book[j]->findbook(aSearch, tSearch))
+				{
+					std::cout << "\nBook exists and found";
+					book[j]->info();
+					break;
+				}
+		case 4:
+			std::cin.ignore();
+			std::cout << "\nEnter Author: ";
+			std::cin.getline(aSearch, 40);
+			std::cout << "Enter Title: ";
+			std::cin.getline(tSearch, 40);
+
+			for (j = 0;j < i;j++)
+				if (book[j]->findbook(aSearch, tSearch))
+				{
+					std::cout << "\nBook exists and found";
+					book[j]->editinfo();
+					break;
+				}
+			if (j == i)
+				std::cout << "Book not in stock";
+			break;
+		case 5:
+			exit(0);
+		default: std::cout << "\nWrong choice entered";
+		}
+	}
+}
+
